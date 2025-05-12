@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>中哈网络文化研习社</title>
+    <style>
+        /* 基础样式 */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        
+        body {
+            font-family: 'Helvetica Neue', Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f8f9fa;
+        }
+        
+        /* 白色导航栏 - 财经专版 */
+        header {
+            background-color: white;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            border-bottom: 2px solid #34a853; /* 财经主题色 */
+        }
+        
+        .header-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: #333;
+            text-decoration: none;
+        }
+        
+        .logo span {
+            color: #34a853; /* 财经主题色 */
+        }
+        
+        /* 财经导航菜单 */
+        nav ul {
+            display: flex;
+            list-style: none;
+        }
+        
+        nav li {
+            margin-left: 2rem;
+        }
+        
+        nav a {
+            color: #555;
+            text-decoration: none;
+            font-weight: 500;
+            padding: 0.5rem 0;
+            position: relative;
+            transition: color 0.3s ease;
+        }
+        
+        nav a:hover {
+            color: #34a853; /* 财经主题色 */
+        }
+        
+        nav a:after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: 0;
+            left: 0;
+            background-color: #34a853; /* 财经主题色 */
+            transition: width 0.3s ease;
+        }
+        
+        nav a:hover:after {
+            width: 100%;
+        }
+        
+        /* 当前页面高亮 */
+        nav a[href="#business"] {
+            color: #34a853;
+            font-weight: 600;
+        }
+        
+        nav a[href="#business"]:after {
+            width: 100%;
+        }
+        
+        /* 主要内容区 */
+        .container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+        
+        .page-header {
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .page-title {
+            font-size: 2rem;
+            font-weight: normal;
+            color: #222;
+            margin-bottom: 0.5rem;
+        }
+        
+        .page-subtitle {
+            color: #666;
+            font-size: 1rem;
+        }
+        
+        /* 财经新闻卡片 */
+        .finance-card {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 3px 15px rgba(0,0,0,0.05);
+            overflow: hidden;
+            margin-bottom: 2rem;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border-left: 4px solid #34a853; /* 财经主题色 */
+        }
+        
+        .finance-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+        }
+        
+        .finance-card img {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+        }
+        
+        .finance-content {
+            padding: 1.5rem;
+        }
+        
+        .finance-tag {
+            display: inline-block;
+            background: #e6f4ea; /* 浅绿色背景 */
+            color: #34a853;
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            margin-bottom: 0.8rem;
+            font-weight: 500;
+        }
+        
+        .finance-title {
+            font-size: 1.4rem;
+            margin-bottom: 0.8rem;
+            color: #222;
+            line-height: 1.4;
+        }
+        
+        .finance-summary {
+            color: #666;
+            margin-bottom: 1rem;
+            line-height: 1.7;
+        }
+        
+        .finance-meta {
+            display: flex;
+            align-items: center;
+            color: #888;
+            font-size: 0.9rem;
+            margin-top: 1.5rem;
+        }
+        
+        .finance-date {
+            margin-right: 1rem;
+            color: #ea4335;
+            font-weight: 500;
+        }
+        
+        .finance-source {
+            font-style: italic;
+        }
+        
+        .market-trend {
+            display: inline-flex;
+            align-items: center;
+            margin-left: auto;
+            font-weight: 500;
+        }
+        
+        .up {
+            color: #ea4335; /* 上涨红色 */
+        }
+        
+        .down {
+            color: #34a853; /* 下跌绿色 */
+        }
+        
+        /* 数据展示样式 */
+        .data-point {
+            display: flex;
+            justify-content: space-between;
+            margin: 1rem 0;
+            padding: 0.8rem;
+            background: #f8f9fa;
+            border-radius: 6px;
+        }
+        
+        .data-label {
+            color: #666;
+        }
+        
+        .data-value {
+            font-weight: bold;
+            color: #222;
+        }
+        
+        /* 新闻网格布局 */
+        .finance-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+        
+        /* 侧边栏 - 市场数据 */
+        .sidebar {
+            margin-top: 2rem;
+            background: white;
+            border-radius: 8px;
+            padding: 1.5rem;
+            box-shadow: 0 3px 15px rgba(0,0,0,0.05);
+        }
+        
+        .sidebar-title {
+            font-size: 1.2rem;
+            color: #222;
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid #34a853;
+            display: inline-block;
+        }
+        
+        .market-data {
+            list-style: none;
+        }
+        
+        .market-data li {
+            padding: 0.8rem 0;
+            border-bottom: 1px dashed #eee;
+        }
+        
+        .market-index {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .index-name {
+            font-weight: 500;
+        }
+        
+        .index-value {
+            font-weight: bold;
+        }
+        
+        .index-change {
+            font-size: 0.9rem;
+        }
+        
+        /* 页脚 */
+        footer {
+            background: white;
+            padding: 2rem 0;
+            margin-top: 3rem;
+            border-top: 1px solid #eee;
+        }
+        
+        .footer-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1rem;
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+        }
+        
+        .footer-section {
+            flex: 1;
+            min-width: 200px;
+            margin-bottom: 1.5rem;
+            padding: 0 1rem;
+        }
+        
+        .footer-section h3 {
+            color: #333;
+            margin-bottom: 1rem;
+            font-size: 1.1rem;
+        }
+        
+        .footer-section ul {
+            list-style: none;
+        }
+        
+        .footer-section li {
+            margin-bottom: 0.5rem;
+        }
+        
+        .footer-section a {
+            color: #666;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+        
+        .footer-section a:hover {
+            color: #34a853;
+        }
+        
+        .copyright {
+            text-align: center;
+            margin-top: 2rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid #eee;
+            color: #999;
+            font-size: 0.9rem;
+        }
+        
+        /* 响应式设计 */
+        @media (max-width: 768px) {
+            .header-container {
+                flex-direction: column;
+                padding: 1rem;
+            }
+            
+            nav ul {
+                margin-top: 1rem;
+            }
+            
+            nav li {
+                margin-left: 1rem;
+                margin-right: 1rem;
+            }
+            
+            .finance-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .footer-section {
+                flex: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 白色导航栏 -->
+    <header>
+        <div class="header-container">
+            <a href="#" class="logo">中哈<span>文化云脉</span></a>
+            <nav>
+                <ul>
+                     <li><a href="https://zhwhym.github.io/1//">首页</a></li>
+                    <li><a href="https://zhwhym.github.io/2/">走近哈萨克斯坦</a></li>
+                    <li><a href="https://zhwhym.github.io/3/">相关资料</a></li>
+                    <li><a href="https://zhwhym.github.io/4/">公众号</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <!-- 主要内容 -->
+    <main class="container">
+        <div class="page-header">
+            <h1 class="page-title"></h1>
+            <p class="page-subtitle"></p>
+        </div>
+        
+        <!-- 头条新闻 -->
+        <article class="finance-card">
+            <div class="finance-content">
+                <span class="finance-tag">网络文化</span>
+                <h2 class="finance-title"> 中哈网络文化的镜像与交融</h2>
+                <p class="finance-summary">在数字化的浪潮中，网络语言不仅是沟通的工具，更是文化的载体。中国与哈萨克斯坦作为“一带一路”上的重要邻邦，其网络语言的发展既体现了各自的文化特色，也反映了全球化背景下的文化交融。今天，我们将从网络语言的角度，深入探讨中哈网络文化的异同，揭示数字时代下两国文化的独特魅力。  </p>
+                
+                <div class="data-point">
+                    <span class="data-label">哈萨克斯坦网络语言的特点</span>
+                    <span class="data-value">Сәлем</span>
+                </div>
+                <div class="data-point">
+                    <span class="data-label">中国网络语言的特点</span>
+                    <span class="data-value">yyds</span>
+                </div>
+                 <a href="https://mp.weixin.qq.com/s/y5yOoOuW3R8wh6Espjb4Mw" class="read-more">阅读全文 →</a>
+                <div class="finance-meta">
+                    <span class="finance-date">2025年2月02日</span>
+                    <span class="finance-source">来源：中哈网络文化研习社</span>
+                   
+                </div>
+            </div>
+        </article>
+        
+        <!-- 新闻网格 -->
+        <div class="finance-grid">
+            <article class="finance-card">
+                <div class="finance-content">
+                    <span class="finance-tag">新媒体</span>
+                    <h2 class="finance-title">从B站到YouTube：中哈弹幕文化为何“冰火两重天”？</h2>
+                    <p class="finance-summary">2025年1月28日（腊月廿九）是中国传统节日—除夕，在这阖家团圆、喜气洋洋的时刻，中央电视台如约为大家献上了2025年春节联欢晚会，今年更是首次在bilibili（B站）同步直播，B站也成为央视春晚的独家弹幕视频平台。实时滚动的弹幕如潮水般涌来，观众们用“新年快乐”“国泰民安”等祝福刷屏，天南海北的网友仿佛在虚拟空间中“围炉守岁”，共度团圆时刻...</p>
+                    <div class="finance-meta">
+                        <a href="https://mp.weixin.qq.com/s/PZlv8Z-NpvNOOaxmMic0Eg" class="read-more">阅读全文 →</a>
+                        <span class="finance-date">2025年2月08日</span>
+                        <span class="market-trend up">中哈网络文化研习社</span>
+                    </div>
+                </div>
+            </article>
+            
+            <article class="finance-card">
+                <div class="finance-content">
+                    <span class="finance-tag">新媒体</span>
+                    <h2 class="finance-title">短视频vs图文社交</h2>
+                    <p class="finance-summary">抖音以短视频为核心，打开应用，各种音乐、舞蹈、搞笑、知识科普类短视频如潮水般涌来。短视频时长通常较短，以秒计算，内容紧凑、信息多元。用户可以在极短时间内浏览大量不同类型的内容，手指轻轻一划，新的精彩随即呈现。这种快节奏的娱乐模式，契合了中国年轻人快节奏的生活状态。他们利用碎片化时间，随时随地开启娱乐放松之旅。无论是在公交地铁上，还是午休间隙，都能沉浸在抖音的多彩世界里...</p>
+                    <div class="finance-meta">
+                        <a href="https://mp.weixin.qq.com/s/Vl0U5Uhsol3d_lCsDSkzRw" class="read-more">阅读全文 →</a>
+                        <span class="finance-date">2025年5月6日</span>
+                        <span class="market-trend up">中哈网络文化研习社</span>
+                    </div>
+                </div>
+            </article>
+            
+            <article class="finance-card">
+                <div class="finance-content">
+                    <span class="finance-tag">文化交流</span>
+                    <h2 class="finance-title">救命！这节日名字我都念不顺…</h2>
+                    <p class="finance-summary">最新调研显示，仅有30%的中国大学生了解哈萨克斯坦最重要的传统节日——**纳乌鲁斯节**（Navruz），而哈国青年对中国春节的认知度却高达85%。这一数据折射出两国网民在文化认知上的显著差异，也引发了对跨文化教育的新思考。纳乌鲁斯节，意为“新的日子”，是哈萨克斯坦、乌兹别克斯坦等中亚国家的“春节”，每年3月21日春分时庆祝，象征万物复苏。节日期间，人们会煮“纳乌鲁斯粥”、跳传统舞蹈、举办叼羊比赛，甚至总统也会亲自参与庆典。然而，如此盛大的节日，在国内却鲜为人知  ...</p>
+                    <div class="finance-meta">
+                         <a href="https://mp.weixin.qq.com/s/QH0832KN7-dLiLDSlG2zMA" class="read-more">阅读全文 →</a>
+                        <span class="finance-date">2025年5月9日</span>
+                        <span class="market-trend up">中哈网络文化研习社</span>
+                    </div>
+                </div>
+            </article>
+        </div>
+     <!-- 页脚 -->
+     <footer>
+        <div class="footer-container">
+            <div class="footer-section">
+                <h3>关于我们</h3>
+                <ul>
+                    <li><a href="#">联系我们</a></li>
+                    <li><a href="#">加入团队</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                
+                
+            </div>
+            <div class="footer-section">
+                <ul>
+                  
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h3>关注我们</h3>
+                <ul>
+                    <li><a href="">微信公众号：中哈文化研习社</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="copyright">
+            <p>&copy;2025 简讯新闻|</p>
+        </div>
+    </footer>
+</body>
+</html>
